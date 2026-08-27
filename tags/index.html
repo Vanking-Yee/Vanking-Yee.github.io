@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" >
 
 
 
@@ -57,8 +57,6 @@
 
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
 
 
 
@@ -66,7 +64,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0,"heading":"目录"},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -79,13 +77,21 @@
 
 
   
+  <!-- ===== 强制背景图 ===== -->
+  <style>
+    body {
+      background-image: url('/images/bg.jpg') !important;
+      background-size: cover !important;
+      background-attachment: fixed !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+    }
+  </style>
 <meta name="generator" content="Hexo 7.3.0"></head>
+</head>
 
 
 <body>
-<div style="text-align: center; padding: 20px 0;">
-  <img src="/avatar.jpg" srcset="/img/loading.gif" lazyload alt="头像" style="width: 100px; height: 100px; border-radius: 50%;">
-</div>
   
 
   <header>
@@ -95,7 +101,7 @@
   <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
     <div class="container">
         <a class="navbar-brand" href="/" style="display: flex; align-items: center; gap: 10px;">
-            <img src="/avatar.jpg" srcset="/img/loading.gif" lazyload alt="头像" style="width: 36px; height: 36px; border-radius: 50%;">
+            <img src="http://localhost:4000/avatar.jpg" srcset="/img/loading.gif" lazyload style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
             <strong>叶文青的博客</strong>
         </a>
 
@@ -104,7 +110,6 @@
             <div class="animated-icon"><span></span><span></span><span></span></div>
         </button>
 
-        <!-- Collapsible content (desktop) -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto text-center">
                 
@@ -167,7 +172,6 @@
         </div>
     </div>
 </nav>
-
   
 
 <div id="banner" class="banner" parallax=true
@@ -211,7 +215,7 @@
                 
 
 <div class="text-center tagcloud">
-  
+  <a href="/tags/%E5%86%9B%E8%AE%AD/" style="font-size: 15px; color: #bbe">军训</a> <a href="/tags/%E5%A4%A7%E5%AD%A6/" style="font-size: 15px; color: #bbe">大学</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 15px; color: #bbe">生活</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 15px; color: #bbe">记录</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 15px; color: #bbe">随笔</a>
 </div>
 
               </div>
@@ -228,28 +232,6 @@
     
 
     
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
 
     
   </main>
@@ -258,7 +240,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+      Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> & <a href="https://fluid.ist" target="_blank" rel="noopener">Fluid</a>
     </div>
   
   
