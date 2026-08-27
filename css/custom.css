@@ -1,0 +1,18 @@
+/* 自定义背景图 */
+body {
+    background-image: url('/images/bg.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+/* 卡片保持白色，不影响阅读 */
+.card {
+    background-color: #ffffff !important;
+}
+.navbar {
+    background-color: #ffffff !important;
+}
+footer {
+    background-color: #ffffff !important;
+}
