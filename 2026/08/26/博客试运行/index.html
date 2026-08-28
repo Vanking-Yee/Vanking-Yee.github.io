@@ -87,8 +87,10 @@
 
 
   
-  <!-- ===== 强制背景图 ===== -->
+
+  <!-- ===== 自定义移动端菜单样式 ===== -->
   <style>
+    /* 背景图 */
     body {
       background-image: url('/images/bg.jpg') !important;
       background-size: cover !important;
@@ -96,10 +98,34 @@
       background-position: center !important;
       background-repeat: no-repeat !important;
     }
-  </style>
-<meta name="generator" content="Hexo 7.3.0"></head>
-</head>
 
+    /* 移动端菜单美化 */
+    @media (max-width: 768px) {
+      .navbar-nav {
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        margin-top: 10px;
+        padding: 8px 0;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      }
+      .navbar-nav .nav-item {
+        padding: 8px 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+      }
+      .navbar-nav .nav-item:last-child {
+        border-bottom: none;
+      }
+      .navbar-nav a {
+        color: #333 !important;
+        font-weight: 500;
+      }
+    }
+  </style>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
   
@@ -115,20 +141,26 @@
             <strong>叶文青的博客</strong>
         </a>
 
-        <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <div class="animated-icon"><span></span><span></span><span></span></div>
+        <!-- 汉堡菜单按钮 -->
+        <button id="menuBtn" class="navbar-toggler" type="button" 
+            style="border: 2px solid #333; background: #ffffff; border-radius: 8px; padding: 6px 10px; cursor: pointer; display: block;">
+            <svg viewBox="0 0 30 30" width="26" height="26" style="display: block;">
+                <line x1="4" y1="8" x2="26" y2="8" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="4" y1="15" x2="26" y2="15" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="4" y1="22" x2="26" y2="22" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto text-center">
+        <!-- 菜单 -->
+        <div id="menuContainer" class="navbar-collapse" style="display: none; width: 100%;">
+            <ul class="navbar-nav ml-auto text-center" style="flex-direction: column; padding: 10px 0; margin: 0; list-style: none; background: rgba(255,255,255,0.95); border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
                 
                     
                     
                     
                     
-                        <li class="nav-item">
-                            <a class="nav-link" href="/" target="_self">
+                        <li class="nav-item" style="padding: 6px 16px; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <a class="nav-link" href="/" target="_self" style="color: #333 !important; font-weight: 500;">
                                 <span>首页</span>
                             </a>
                         </li>
@@ -138,8 +170,8 @@
                     
                     
                     
-                        <li class="nav-item">
-                            <a class="nav-link" href="/archives/" target="_self">
+                        <li class="nav-item" style="padding: 6px 16px; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <a class="nav-link" href="/archives/" target="_self" style="color: #333 !important; font-weight: 500;">
                                 <span>归档</span>
                             </a>
                         </li>
@@ -149,8 +181,8 @@
                     
                     
                     
-                        <li class="nav-item">
-                            <a class="nav-link" href="/categories/" target="_self">
+                        <li class="nav-item" style="padding: 6px 16px; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <a class="nav-link" href="/categories/" target="_self" style="color: #333 !important; font-weight: 500;">
                                 <span>分类</span>
                             </a>
                         </li>
@@ -160,8 +192,8 @@
                     
                     
                     
-                        <li class="nav-item">
-                            <a class="nav-link" href="/tags/" target="_self">
+                        <li class="nav-item" style="padding: 6px 16px; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <a class="nav-link" href="/tags/" target="_self" style="color: #333 !important; font-weight: 500;">
                                 <span>标签</span>
                             </a>
                         </li>
@@ -171,8 +203,8 @@
                     
                     
                     
-                        <li class="nav-item">
-                            <a class="nav-link" href="/about/" target="_self">
+                        <li class="nav-item" style="padding: 6px 16px; border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <a class="nav-link" href="/about/" target="_self" style="color: #333 !important; font-weight: 500;">
                                 <span>关于</span>
                             </a>
                         </li>
@@ -182,6 +214,17 @@
         </div>
     </div>
 </nav>
+
+<script>
+    document.getElementById('menuBtn').onclick = function() {
+        var menu = document.getElementById('menuContainer');
+        if (menu.style.display === 'none') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
+    };
+</script>
   
 
 <div id="banner" class="banner" parallax=true
