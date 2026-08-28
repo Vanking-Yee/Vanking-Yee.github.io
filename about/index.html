@@ -19,12 +19,12 @@
   <meta name="author" content="Vanking_叶文青">
   <meta name="keywords" content="生活,思考,博客">
   
-    <meta name="description" content="关于叶文青你好！我是叶文青，目前在大连理工大学就读。 这个博客是我记录生活、学习和思考的地方。 联系方式 邮箱：&#49;&#x34;&#x36;&#52;&#57;&#54;&#57;&#x34;&#50;&#x30;&#64;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d; GitHub：[Vanking-Yee]  关于这个博客这个博客使用 Hexo 搭建，Fluid">
+    <meta name="description" content="关于叶文青你好！我是叶文青，目前在大连理工大学就读。 这个博客是我记录生活、学习和思考的地方。 联系方式 邮箱：&#49;&#52;&#54;&#x34;&#57;&#x36;&#57;&#52;&#x32;&#48;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#109; GitHub：[Vanking-Yee]  关于这个博客这个博客使用 Hexo 搭建，Fluid">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于我">
 <meta property="og:url" content="http://example.com/about/index.html">
 <meta property="og:site_name" content="叶文青的博客">
-<meta property="og:description" content="关于叶文青你好！我是叶文青，目前在大连理工大学就读。 这个博客是我记录生活、学习和思考的地方。 联系方式 邮箱：&#49;&#x34;&#x36;&#52;&#57;&#54;&#57;&#x34;&#50;&#x30;&#64;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d; GitHub：[Vanking-Yee]  关于这个博客这个博客使用 Hexo 搭建，Fluid">
+<meta property="og:description" content="关于叶文青你好！我是叶文青，目前在大连理工大学就读。 这个博客是我记录生活、学习和思考的地方。 联系方式 邮箱：&#49;&#52;&#54;&#x34;&#57;&#x36;&#57;&#52;&#x32;&#48;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#109; GitHub：[Vanking-Yee]  关于这个博客这个博客使用 Hexo 搭建，Fluid">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-08-27T16:00:00.000Z">
 <meta property="article:modified_time" content="2026-08-27T18:45:48.570Z">
@@ -80,7 +80,7 @@
 
   
 
-  <!-- ===== 自定义移动端菜单样式 ===== -->
+  <!-- ===== 自定义样式 ===== -->
   <style>
     /* 背景图 */
     body {
@@ -117,6 +117,52 @@
     }
   </style>
 
+  <!-- ===== 导航栏滚动效果 ===== -->
+  <script>
+    (function() {
+      // 等待页面加载完成
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      function init() {
+        var nav = document.getElementById('navbar');
+        if (!nav) return;
+
+        var navLinks = document.querySelectorAll('#navbar .navbar-nav a');
+        var brandStrong = document.querySelector('#navbar .navbar-brand strong');
+
+        function updateNavbar() {
+          if (window.scrollY > 50) {
+            nav.style.background = '#2c3e6b';
+            nav.style.boxShadow = '0 2px 12px rgba(0,0,0,0.2)';
+            if (brandStrong) brandStrong.style.color = '#ffffff';
+            navLinks.forEach(function(el) {
+              el.style.color = '#ffffff';
+              el.style.textShadow = 'none';
+            });
+          } else {
+            nav.style.background = 'transparent';
+            nav.style.boxShadow = 'none';
+            if (brandStrong) brandStrong.style.color = '#ffffff';
+            navLinks.forEach(function(el) {
+              el.style.color = '#ffffff';
+              el.style.textShadow = '0 1px 4px rgba(0,0,0,0.3)';
+            });
+          }
+        }
+
+        // 初始执行
+        updateNavbar();
+
+        // 监听滚动
+        window.addEventListener('scroll', updateNavbar);
+      }
+    })();
+  </script>
+
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
@@ -126,11 +172,11 @@
     
 
 <div class="header-inner" style="height: 50vh;">
-  <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar" style="background: transparent !important; box-shadow: none !important;">
+  <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar" style="background: transparent !important; box-shadow: none !important; transition: background 0.3s, box-shadow 0.3s;">
     <div class="container">
         <a class="navbar-brand" href="/" style="display: flex; align-items: center; gap: 10px; color: #ffffff !important;">
             <img src="https://vanking-yee.github.io/avatar.jpg" srcset="/img/loading.gif" lazyload style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.4);">
-            <strong style="color: #ffffff !important;">叶文青的博客</strong>
+            <strong style="color: #ffffff !important; transition: color 0.3s;">叶文青的博客</strong>
         </a>
 
         <!-- 汉堡菜单按钮 -->
@@ -152,7 +198,7 @@
                     
                     
                         <li class="nav-item" style="padding: 0;">
-                            <a class="nav-link" href="/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+                            <a class="nav-link" href="/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: color 0.3s;">
                                 <span>首页</span>
                             </a>
                         </li>
@@ -163,7 +209,7 @@
                     
                     
                         <li class="nav-item" style="padding: 0;">
-                            <a class="nav-link" href="/archives/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+                            <a class="nav-link" href="/archives/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: color 0.3s;">
                                 <span>归档</span>
                             </a>
                         </li>
@@ -174,7 +220,7 @@
                     
                     
                         <li class="nav-item" style="padding: 0;">
-                            <a class="nav-link" href="/categories/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+                            <a class="nav-link" href="/categories/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: color 0.3s;">
                                 <span>分类</span>
                             </a>
                         </li>
@@ -185,7 +231,7 @@
                     
                     
                         <li class="nav-item" style="padding: 0;">
-                            <a class="nav-link" href="/tags/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+                            <a class="nav-link" href="/tags/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: color 0.3s;">
                                 <span>标签</span>
                             </a>
                         </li>
@@ -196,7 +242,7 @@
                     
                     
                         <li class="nav-item" style="padding: 0;">
-                            <a class="nav-link" href="/about/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+                            <a class="nav-link" href="/about/" target="_self" style="color: #ffffff !important; font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.3); transition: color 0.3s;">
                                 <span>关于</span>
                             </a>
                         </li>
@@ -267,6 +313,7 @@
 </style>
 
 <script>
+    // 汉堡菜单切换
     document.getElementById('menuBtn').onclick = function() {
         var menu = document.getElementById('menuContainer');
         if (menu.classList.contains('open')) {
@@ -275,6 +322,31 @@
             menu.classList.add('open');
         }
     };
+
+    // 导航栏滚动效果
+    document.addEventListener('scroll', function() {
+        var nav = document.getElementById('navbar');
+        var brandStrong = document.querySelector('#navbar .navbar-brand strong');
+        var navLinks = document.querySelectorAll('#navbar .navbar-nav a');
+        
+        if (window.scrollY > 50) {
+            nav.style.background = 'rgba(255, 255, 255, 0.95)';
+            nav.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)';
+            if (brandStrong) brandStrong.style.color = '#333';
+            navLinks.forEach(function(el) {
+                el.style.color = '#333 !important';
+                el.style.textShadow = 'none';
+            });
+        } else {
+            nav.style.background = 'transparent';
+            nav.style.boxShadow = 'none';
+            if (brandStrong) brandStrong.style.color = '#ffffff';
+            navLinks.forEach(function(el) {
+                el.style.color = '#ffffff !important';
+                el.style.textShadow = '0 1px 4px rgba(0,0,0,0.3)';
+            });
+        }
+    });
 </script>
   
 
@@ -318,7 +390,7 @@
   <h2 id="关于叶文青"><a href="#关于叶文青" class="headerlink" title="关于叶文青"></a>关于叶文青</h2><p>你好！我是叶文青，目前在大连理工大学就读。</p>
 <p>这个博客是我记录生活、学习和思考的地方。</p>
 <h3 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h3><ul>
-<li>邮箱：<a href="mailto:&#49;&#x34;&#x36;&#52;&#57;&#54;&#57;&#x34;&#50;&#x30;&#64;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d;">&#49;&#x34;&#x36;&#52;&#57;&#54;&#57;&#x34;&#50;&#x30;&#64;&#x71;&#x71;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+<li>邮箱：<a href="mailto:&#49;&#52;&#54;&#x34;&#57;&#x36;&#57;&#52;&#x32;&#48;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#109;">&#49;&#52;&#54;&#x34;&#57;&#x36;&#57;&#52;&#x32;&#48;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#109;</a></li>
 <li>GitHub：[Vanking-Yee]</li>
 </ul>
 <h3 id="关于这个博客"><a href="#关于这个博客" class="headerlink" title="关于这个博客"></a>关于这个博客</h3><p>这个博客使用 Hexo 搭建，Fluid 主题，托管在 GitHub Pages 上。</p>
