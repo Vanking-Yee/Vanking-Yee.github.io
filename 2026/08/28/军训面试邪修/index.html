@@ -87,7 +87,6 @@
 
   <!-- ===== 自定义样式 ===== -->
   <style>
-    /* 背景图 */
     body {
       background-image: url('/images/bg.jpg') !important;
       background-size: cover !important;
@@ -96,7 +95,6 @@
       background-repeat: no-repeat !important;
     }
 
-    /* 移动端菜单美化 */
     @media (max-width: 768px) {
       .navbar-nav {
         flex-direction: column;
@@ -120,12 +118,86 @@
         font-weight: 500;
       }
     }
+
+    /* ===== 目录黑底白字（无边框无方框） ===== */
+    #toc,
+    .toc,
+    .post-toc {
+      background-color: #1a1a2e !important;
+      padding: 16px 20px !important;
+      border-radius: 12px !important;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+      border: none !important;
+      outline: none !important;
+      position: sticky !important;
+      top: 80px !important;
+      z-index: 10 !important;
+      color: #ffffff !important;
+    }
+
+    #toc *,
+    .toc *,
+    .post-toc * {
+      color: #ffffff !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    #toc a,
+    .toc a,
+    .post-toc a {
+      color: #ffffff !important;
+      text-decoration: none !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    #toc a:hover,
+    .toc a:hover,
+    .post-toc a:hover {
+      color: #88ccff !important;
+    }
+
+    #toc .active a,
+    .toc .active a,
+    .post-toc .active a {
+      color: #88ccff !important;
+      font-weight: 600 !important;
+    }
+
+    #toc ul,
+    .toc ul,
+    .post-toc ul {
+      list-style: none !important;
+      padding-left: 0 !important;
+    }
+
+    #toc li,
+    .toc li,
+    .post-toc li {
+      list-style: none !important;
+      padding: 4px 0 !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    #toc li:last-child,
+    .toc li:last-child,
+    .post-toc li:last-child {
+      border-bottom: none !important;
+    }
+
+    #toc ul ul,
+    .toc ul ul,
+    .post-toc ul ul {
+      padding-left: 16px !important;
+    }
   </style>
 
-  <!-- ===== 导航栏滚动效果 ===== -->
   <script>
     (function() {
-      // 等待页面加载完成
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
       } else {
@@ -159,10 +231,7 @@
           }
         }
 
-        // 初始执行
         updateNavbar();
-
-        // 监听滚动
         window.addEventListener('scroll', updateNavbar);
       }
     })();
