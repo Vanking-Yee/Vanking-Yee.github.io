@@ -700,12 +700,22 @@
 
   
 
-  <!-- ===== 音乐播放器 ===== -->
+  <!-- ===== 音乐播放器（按钮式弹出） ===== -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
   <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-  <div id="global-aplayer"></div>
+
+  <!-- 触发按钮 -->
+  <div id="player-toggle" style="position:fixed;left:20px;top:80px;width:48px;height:48px;border-radius:50%;background:#b3d9f0;box-shadow:0 4px 20px rgba(0,0,0,0.10);z-index:1000;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:#1a1a2e;user-select:none;" onclick="var p=document.getElementById('player-panel');var t=this;if(p.style.display=='none'){p.style.display='block';t.style.opacity='0.3'}else{p.style.display='none';t.style.opacity='1'}">
+    <span style="font-size:24px;">♪</span>
+  </div>
+
+  <!-- 播放器面板（在按钮正下方） -->
+  <div id="player-panel" style="position:fixed;left:20px;top:136px;width:200px;height:320px;z-index:999;display:none;border-radius:0 20px 20px 0;background:#b3d9f0;box-shadow:2px 0 24px rgba(0,0,0,0.10);overflow:hidden;padding:16px 12px;box-sizing:border-box;">
+    <div id="global-aplayer" style="width:100%;height:100%;"></div>
+  </div>
 
   <style>
+    /* ===== 隐藏封面图 ===== */
     #global-aplayer .aplayer-pic {
       display: none !important;
     }
@@ -713,228 +723,196 @@
       margin-left: 0 !important;
     }
 
-    /* ===== 横屏（宽屏）：正方形，紧贴左侧边栏 ===== */
-    @media (min-width: 769px) {
-      #global-aplayer {
-        position: fixed;
-        left: 0;
-        top: 50%;
-        transform: translateY(-55%);
-        width: 180px;
-        height: 360px;
-        z-index: 999;
-      }
-      #global-aplayer .aplayer {
-        height: 100% !important;
-        width: 100% !important;
-        border-radius: 0 30px 30px 0 !important;
-        background: #b3d9f0 !important;
-        backdrop-filter: blur(8px);
-        box-shadow: 2px 0 24px rgba(0,0,0,0.10) !important;
-        overflow: hidden;
-      }
-      #global-aplayer .aplayer .aplayer-info {
-        height: 100% !important;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 16px;
-        background: transparent !important;
-        margin-left: 0 !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-music {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        width: 100%;
-        margin-bottom: 8px;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-title {
-        font-size: 15px;
-        font-weight: 700;
-        color: #1a1a2e;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-author {
-        font-size: 12px;
-        color: #555;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 4px;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap {
-        display: flex !important;
-        width: 100%;
-        padding: 0 4px;
-        margin-bottom: 4px;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
-        background: rgba(26, 26, 46, 0.15) !important;
-        height: 4px !important;
-        border-radius: 4px !important;
-        width: 100%;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
-        background: #1a1a2e !important;
-        height: 4px !important;
-        border-radius: 4px !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
-        width: 12px !important;
-        height: 12px !important;
-        background: #1a1a2e !important;
-        top: -4px !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-volume,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-lrc,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-time {
-        display: none !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-controls {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        width: 100%;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-play,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-pause {
-        font-size: 26px !important;
-        width: 42px !important;
-        height: 42px !important;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        color: #1a1a2e !important;
-        cursor: pointer;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-back,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-forward {
-        font-size: 20px !important;
-        width: 36px !important;
-        height: 36px !important;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        color: #1a1a2e !important;
-        cursor: pointer;
-      }
-      #global-aplayer .aplayer .aplayer-list {
-        display: none !important;
-      }
+    #global-aplayer .aplayer {
+      height: 100% !important;
+      width: 100% !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      overflow: hidden;
+      position: relative !important;
+    }
+    #global-aplayer .aplayer .aplayer-info {
+      height: 100% !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 16px 12px;
+      background: transparent !important;
+      margin-left: 0 !important;
+    }
+    /* 歌曲信息 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-music {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a2e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-author {
+      font-size: 11px;
+      color: #555;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    /* 控制器 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 4px;
+    }
+    /* 进度条 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap {
+      display: flex !important;
+      width: 100%;
+      padding: 0 2px;
+      margin-bottom: 4px;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+      background: rgba(26, 26, 46, 0.15) !important;
+      height: 3px !important;
+      border-radius: 4px !important;
+      width: 100%;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
+      background: #1a1a2e !important;
+      height: 3px !important;
+      border-radius: 4px !important;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
+      width: 10px !important;
+      height: 10px !important;
+      background: #1a1a2e !important;
+      top: -3.5px !important;
+    }
+    /* 按钮行 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-controls {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    /* 隐藏不需要的按钮 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-back,
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-forward,
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-volume,
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-lrc {
+      display: none !important;
+    }
+    /* 歌单菜单按钮 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu {
+      display: flex !important;
+      font-size: 16px !important;
+      width: 28px !important;
+      height: 28px !important;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a2e !important;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu:hover {
+      opacity: 1;
+    }
+    /* 循环模式按钮 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order,
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop {
+      display: flex !important;
+      font-size: 16px !important;
+      width: 28px !important;
+      height: 28px !important;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a2e !important;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order.active,
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop.active {
+      opacity: 1 !important;
+    }
+    /* 播放/暂停 */
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-play,
+    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-pause {
+      font-size: 24px !important;
+      width: 38px !important;
+      height: 38px !important;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a2e !important;
+      cursor: pointer;
+    }
+    /* 歌单列表：从底部往上弹出 */
+    #global-aplayer .aplayer .aplayer-list {
+      display: none !important;
+      position: absolute !important;
+      bottom: 100% !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-height: 140px !important;
+      overflow-y: auto !important;
+      background: rgba(255,255,255,0.95) !important;
+      border-radius: 12px 12px 0 0 !important;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06) !important;
+      z-index: 1000 !important;
+    }
+    #global-aplayer .aplayer.aplayer-withlist .aplayer-list {
+      display: block !important;
     }
 
-    /* ===== 竖屏（手机）：底部占满 ===== */
+    /* ===== 按钮和面板的响应式调整 ===== */
     @media (max-width: 768px) {
-      #global-aplayer {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 64px;
-        z-index: 999;
-        padding: 0;
+      #player-toggle {
+        left: 12px !important;
+        top: 70px !important;
+        width: 40px !important;
+        height: 40px !important;
       }
-      #global-aplayer .aplayer {
-        height: 100% !important;
-        border-radius: 0 !important;
-        background: #b3d9f0 !important;
-        backdrop-filter: blur(8px);
-        box-shadow: 0 -2px 12px rgba(0,0,0,0.06) !important;
-        overflow: hidden;
+      #player-toggle span {
+        font-size: 20px !important;
       }
-      #global-aplayer .aplayer-pic {
-        display: none !important;
-      }
-      #global-aplayer .aplayer .aplayer-info {
-        height: 100% !important;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 16px;
-        background: transparent !important;
-        margin-left: 0 !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-music {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        flex: 1;
-        min-width: 0;
-        padding-right: 12px;
+      #player-panel {
+        left: 12px !important;
+        top: 118px !important;
+        width: 170px !important;
+        height: 280px !important;
+        padding: 12px 8px !important;
       }
       #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: #1a1a2e;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 12px !important;
       }
       #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-author {
-        font-size: 12px;
-        color: #555;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        flex-shrink: 0;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-volume,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-lrc,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-time {
-        display: none !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap {
-        display: none !important;
+        font-size: 10px !important;
       }
       #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-play,
       #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-pause {
-        font-size: 22px !important;
-        width: 36px !important;
-        height: 36px !important;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        color: #1a1a2e !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-back,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-forward {
-        font-size: 18px !important;
+        font-size: 20px !important;
         width: 32px !important;
         height: 32px !important;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        color: #1a1a2e !important;
       }
-      #global-aplayer .aplayer .aplayer-list {
-        display: none !important;
+      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu,
+      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order,
+      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop {
+        font-size: 14px !important;
+        width: 24px !important;
+        height: 24px !important;
       }
     }
   </style>
@@ -1105,9 +1083,9 @@
           cover: "/images/default.jpg"
         },
         {
-          title: "四季",
+          title: "四季ノ唄",
           artist: "unknown",
-          url: "/music/四季-unknown.mp3",
+          url: "/music/四季ノ唄-unknow.mp3",
           cover: "/images/default.jpg"
         },
         {
@@ -1125,6 +1103,19 @@
       ]
     });
     ap.init();
+
+    // ===== 歌单菜单按钮 =====
+    document.addEventListener('DOMContentLoaded', function() {
+      var menuBtn = document.querySelector('#global-aplayer .aplayer-icon-menu');
+      var player = document.querySelector('#global-aplayer .aplayer');
+
+      if (menuBtn && player) {
+        menuBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          player.classList.toggle('aplayer-withlist');
+        });
+      }
+    });
   </script>
 
   <noscript>
