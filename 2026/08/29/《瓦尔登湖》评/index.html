@@ -981,6 +981,10 @@
 
 
 
+  
+<script src="/js/pjax-player.js"></script>
+
+
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
@@ -993,17 +997,68 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
   <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 
-  <!-- 触发按钮 -->
-  <div id="player-toggle" style="position:fixed;left:20px;top:80px;width:48px;height:48px;border-radius:50%;background:#b3d9f0;box-shadow:0 4px 20px rgba(0,0,0,0.10);z-index:1000;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;color:#1a1a2e;user-select:none;" onclick="var p=document.getElementById('player-panel');var t=this;if(p.style.display=='none'){p.style.display='block';t.style.opacity='0.3'}else{p.style.display='none';t.style.opacity='1'}">
-    <span style="font-size:24px;">♪</span>
+  <!-- 触发按钮（左侧灵动岛气泡） -->
+  <div id="player-toggle" aria-label="音乐播放器" onclick="var p=document.getElementById('player-panel');var t=this;var open=p.style.display==='block';p.style.display=open?'none':'block';t.classList.toggle('open',!open)">
+    <span>元宝音乐播放器</span>
   </div>
 
-  <!-- 播放器面板（在按钮正下方） -->
-  <div id="player-panel" style="position:fixed;left:20px;top:136px;width:200px;height:320px;z-index:999;display:none;border-radius:0 20px 20px 0;background:#b3d9f0;box-shadow:2px 0 24px rgba(0,0,0,0.10);overflow:hidden;padding:16px 12px;box-sizing:border-box;">
-    <div id="global-aplayer" style="width:100%;height:100%;"></div>
+  <!-- 播放器面板（在气泡下方展开） -->
+  <div id="player-panel">
+    <div id="global-aplayer"></div>
   </div>
 
   <style>
+    /* ===== 播放器开关：左侧边栏 ===== */
+    #player-toggle {
+      position: fixed;
+      left: -18px;
+      top: 32%;
+      width: 48px;
+      height: 150px;
+      margin: 0;
+      border-radius: 0 24px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1000;
+      color: #000000;
+      background: linear-gradient(90deg, #ffffff 0%, #ffd24d 100%);
+      transition: left 0.3s ease, opacity 0.25s ease;
+    }
+    #player-toggle:hover,
+    #player-toggle.open {
+      left: 0;
+    }
+    #player-toggle span {
+      font-size: 12px;
+      line-height: 1;
+      letter-spacing: 2px;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+    }
+
+    /* ===== 播放器面板：纯白侧边栏 ===== */
+    #player-panel {
+      position: fixed;
+      left: 0;
+      top: calc(32% + 150px);
+      width: 210px;
+      height: 320px;
+      z-index: 999;
+      display: none;
+      border-radius: 0 28px 28px 0;
+      padding: 16px 12px;
+      box-sizing: border-box;
+      background: #ffffff;
+      overflow: visible;
+    }
+    #global-aplayer {
+      width: 100%;
+      height: 100%;
+    }
+
     /* ===== 隐藏封面图 ===== */
     #global-aplayer .aplayer-pic {
       display: none !important;
@@ -1017,7 +1072,8 @@
       width: 100% !important;
       background: transparent !important;
       box-shadow: none !important;
-      overflow: hidden;
+      overflow: visible !important;
+      border-radius: 0 !important;
       position: relative !important;
     }
     #global-aplayer .aplayer .aplayer-info {
@@ -1169,18 +1225,23 @@
     /* ===== 按钮和面板的响应式调整 ===== */
     @media (max-width: 768px) {
       #player-toggle {
-        left: 12px !important;
-        top: 70px !important;
+        left: -12px !important;
+        top: 34% !important;
         width: 40px !important;
-        height: 40px !important;
+        height: 128px !important;
+        border-radius: 0 20px 20px 0 !important;
+      }
+      #player-toggle:hover,
+      #player-toggle.open {
+        left: 0 !important;
       }
       #player-toggle span {
-        font-size: 20px !important;
+        font-size: 11px !important;
       }
       #player-panel {
-        left: 12px !important;
-        top: 118px !important;
-        width: 170px !important;
+        left: 0 !important;
+        top: calc(34% + 128px) !important;
+        width: 180px !important;
         height: 280px !important;
         padding: 12px 8px !important;
       }
