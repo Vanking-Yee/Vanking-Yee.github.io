@@ -774,7 +774,11 @@
           <span id="player-artist"></span>
         </div>
         <div class="player-progress">
-          <div class="player-progress-track"><span id="player-progress-fill"></span></div>
+          <div class="player-progress-track">
+            <span id="player-progress-fill"></span>
+            <span id="player-progress-thumb"></span>
+            <input type="range" id="player-progress-range" min="0" max="1000" step="1" value="0" aria-label="播放进度" />
+          </div>
           <div class="player-times">
             <span id="player-current">0:00</span>
             <span id="player-duration">0:00</span>
@@ -1096,19 +1100,49 @@
     white-space: nowrap;
   }
   .player-progress-track {
-    height: 5px;
-    margin: 10px 0 4px;
+    position: relative;
+    height: 6px;
+    margin: 12px 0 4px;
     background: #eef0f3;
     border-radius: 999px;
-    overflow: hidden;
+    overflow: visible;
     cursor: pointer;
+    touch-action: none;
   }
   #player-progress-fill {
     display: block;
+    position: relative;
     height: 100%;
     width: 0;
     background: #14161b;
     border-radius: 999px;
+  }
+  #player-progress-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #14161b;
+    box-shadow: 0 0 0 2px #ffffff;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  #player-progress-range {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 22px;
+    margin: 0;
+    transform: translateY(-50%);
+    opacity: 0;
+    cursor: pointer;
+    z-index: 5;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
   }
   .player-times {
     display: flex;
@@ -1358,6 +1392,8 @@
 
     /* ===== 播放器 ===== */
     var audio = new Audio();
+    audio.preload = 'metadata';
+    var currentObjectUrl = null;
     var currentIndex = -1;
     var mode = 'list';
     var songList = document.getElementById('song-list');
@@ -1367,7 +1403,9 @@
     var btnPrev = document.getElementById('btn-prev');
     var btnNext = document.getElementById('btn-next');
     var progressFill = document.getElementById('player-progress-fill');
+    var progressThumb = document.getElementById('player-progress-thumb');
     var progressTrack = document.querySelector('.player-progress-track');
+    var progressRange = document.getElementById('player-progress-range');
     var currentTimeEl = document.getElementById('player-current');
     var durationEl = document.getElementById('player-duration');
     var modeButtons = document.querySelectorAll('.mode-btn');
@@ -1419,11 +1457,31 @@
         return;
       }
       currentIndex = index;
-      audio.src = tracks[index].url;
-      audio.play();
       updateNowPlaying();
-      updatePlayButton();
       updateSongHighlight();
+      playerTitle.textContent = '加载中… ' + tracks[index].title;
+      fetch(tracks[index].url).then(function (response) {
+        if (!response.ok) { throw new Error('load failed'); }
+        return response.blob();
+      }).then(function (blob) {
+        if (currentIndex !== index) { return; }
+        if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); }
+        currentObjectUrl = URL.createObjectURL(blob);
+        audio.src = currentObjectUrl;
+        audio.play();
+        updateNowPlaying();
+        updatePlayButton();
+      }).catch(function () {
+        if (currentIndex !== index) { return; }
+        if (currentObjectUrl) {
+          URL.revokeObjectURL(currentObjectUrl);
+          currentObjectUrl = null;
+        }
+        audio.src = tracks[index].url;
+        audio.play();
+        updateNowPlaying();
+        updatePlayButton();
+      });
     }
 
     function prev() {
@@ -1436,18 +1494,45 @@
       play(currentIndex < 0 ? 0 : (currentIndex + 1) % tracks.length);
     }
 
+    var shuffleOrder = [];
+    var shuffleCursor = 0;
+
+    function shuffleArray(items) {
+      var arr = items.slice();
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr;
+    }
+
+    function buildShuffleOrder() {
+      var others = [];
+      for (var i = 0; i < tracks.length; i++) {
+        if (i !== currentIndex) { others.push(i); }
+      }
+      shuffleOrder = shuffleArray(others);
+      if (currentIndex >= 0) { shuffleOrder.push(currentIndex); }
+      shuffleCursor = 0;
+    }
+
     function shuffleNext() {
-      if (tracks.length <= 1) { play(0); return; }
-      var randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * tracks.length);
-      } while (randomIndex === currentIndex);
-      play(randomIndex);
+      if (tracks.length === 0) { return; }
+      if (tracks.length === 1) { play(0); return; }
+      if (shuffleCursor >= shuffleOrder.length) {
+        buildShuffleOrder();
+      }
+      play(shuffleOrder[shuffleCursor++]);
     }
 
     function setMode(nextMode) {
       mode = nextMode;
       audio.loop = mode === 'single';
+      if (mode === 'shuffle') {
+        buildShuffleOrder();
+      }
       modeButtons.forEach(function (button) {
         button.classList.toggle('active', button.getAttribute('data-mode') === mode);
       });
@@ -1479,8 +1564,10 @@
 
     audio.addEventListener('timeupdate', function () {
       if (!isFinite(audio.duration)) { return; }
-      var percent = audio.duration > 0 ? (audio.currentTime / audio.duration) * 100 : 0;
-      progressFill.style.width = percent + '%';
+      var ratio = audio.duration > 0 ? (audio.currentTime / audio.duration) : 0;
+      progressRange.value = Math.round(ratio * 1000);
+      progressFill.style.width = (ratio * 100) + '%';
+      progressThumb.style.left = (ratio * 100) + '%';
       currentTimeEl.textContent = formatTime(audio.currentTime);
     });
 
@@ -1491,11 +1578,13 @@
     audio.addEventListener('play', updatePlayButton);
     audio.addEventListener('pause', updatePlayButton);
 
-    progressTrack.addEventListener('click', function (event) {
+    progressRange.addEventListener('input', function () {
       if (!isFinite(audio.duration)) { return; }
-      var rect = progressTrack.getBoundingClientRect();
-      var ratio = (event.clientX - rect.left) / rect.width;
-      audio.currentTime = Math.max(0, Math.min(1, ratio)) * audio.duration;
+      var ratio = progressRange.value / 1000;
+      audio.currentTime = ratio * audio.duration;
+      progressFill.style.width = (ratio * 100) + '%';
+      progressThumb.style.left = (ratio * 100) + '%';
+      currentTimeEl.textContent = formatTime(audio.currentTime);
     });
 
     renderSongs();
