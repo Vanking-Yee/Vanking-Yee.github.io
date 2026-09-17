@@ -618,451 +618,755 @@
 
   
 
-  <!-- ===== 音乐播放器（按钮式弹出） ===== -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+  <!-- ===== 左侧边栏 ===== -->
+<div id="side-dock" class="open">
+  <nav id="side-tabs" aria-label="侧边栏">
+    <button class="side-tab active" data-panel="search" title="全站搜索" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+      <span class="tab-label">全站搜索</span>
+    </button>
+    <button class="side-tab" data-panel="player" title="元宝播放器" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+      <span class="tab-label">元宝播放器</span>
+    </button>
+    <button class="side-tab" data-panel="links" title="友链在此" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+      <span class="tab-label">友链在此</span>
+    </button>
+  </nav>
 
-  <!-- 触发按钮（左侧灵动岛气泡） -->
-  <div id="player-toggle" aria-label="音乐播放器" onclick="var p=document.getElementById('player-panel');var t=this;var open=p.style.display==='block';p.style.display=open?'none':'block';t.classList.toggle('open',!open)">
-    <span>元宝音乐播放器</span>
-  </div>
+  <aside id="side-panel">
+    <button id="side-collapse" type="button" title="收起" aria-label="收起侧栏">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+    </button>
+    <section class="side-view" id="view-search">
+      <header class="side-view-head">搜索</header>
+      <div class="side-search-box">
+        <input id="side-search-input" type="search" placeholder="输入关键词搜索文章…" autocomplete="off" />
+      </div>
+      <div id="side-search-result" class="side-search-result"></div>
+    </section>
 
-  <!-- 播放器面板（在气泡下方展开） -->
-  <div id="player-panel">
-    <div id="global-aplayer"></div>
-  </div>
+    <section class="side-view" id="view-player" hidden>
+      <header class="side-view-head">音乐播放器</header>
+      <div id="song-list" class="song-list"></div>
+      <div class="player-dock">
+        <div class="player-now">
+          <strong id="player-title">未播放</strong>
+          <span id="player-artist"></span>
+        </div>
+        <div class="player-progress">
+          <div class="player-progress-track"><span id="player-progress-fill"></span></div>
+          <div class="player-times">
+            <span id="player-current">0:00</span>
+            <span id="player-duration">0:00</span>
+          </div>
+        </div>
+        <div class="player-buttons">
+          <button id="btn-prev" class="player-btn" type="button" title="上一首" aria-label="上一首">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M6 6h2v12H6zM9 12l9 6V6z"></path></svg>
+          </button>
+          <button id="btn-play" class="player-btn primary" type="button" title="播放 / 暂停" aria-label="播放 / 暂停">
+            <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" hidden><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
+          </button>
+          <button id="btn-next" class="player-btn" type="button" title="下一首" aria-label="下一首">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16 6h2v12h-2zM6 6l9 6-9 6z"></path></svg>
+          </button>
+        </div>
+        <div class="player-modes">
+          <button class="mode-btn active" data-mode="list" type="button" title="列表循环" aria-label="列表循环">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="M7 22l-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
+          </button>
+          <button class="mode-btn" data-mode="single" type="button" title="单曲循环" aria-label="单曲循环">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 2l4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="M7 22l-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path><path d="M11 10h1v4"></path></svg>
+          </button>
+          <button class="mode-btn" data-mode="shuffle" type="button" title="随机播放" aria-label="随机播放">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"></path><path d="M4 20L21 3"></path><path d="M21 16v5h-5"></path><path d="M15 15l6 6"></path><path d="M4 4l5 5"></path></svg>
+          </button>
+        </div>
+      </div>
+    </section>
 
-  <style>
-    /* ===== 播放器开关：左侧边栏 ===== */
-    #player-toggle {
-      position: fixed;
-      left: -18px;
-      top: 32%;
+    <section class="side-view" id="view-links" hidden>
+      <header class="side-view-head">友情链接</header>
+      <div class="side-links-empty">
+        <p>这里会放友情链接</p>
+        <p class="muted">暂时还没有，等以后添加</p>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<style>
+  main {
+    margin-left: 64px;
+    transition: margin-left 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  body.side-open main {
+    margin-left: 364px;
+  }
+  #side-dock {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1020;
+    display: flex;
+    align-items: stretch;
+    pointer-events: none;
+  }
+  #side-tabs {
+    position: relative;
+    z-index: 3;
+    width: 64px;
+    height: 100%;
+    background: #14161b;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+    padding-top: 56px;
+    pointer-events: auto;
+  }
+  .side-tab {
+    width: 100%;
+    flex: 1 1 0;
+    min-height: 56px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #7f8794;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    transition: flex-grow 0.3s ease, background 0.2s ease, color 0.2s ease;
+  }
+  .side-tab + .side-tab {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .side-tab:hover,
+  .side-tab.active {
+    flex-grow: 3;
+    background: #ffffff;
+    color: #14161b;
+  }
+  .tab-label {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 2px;
+    font-size: 12px;
+    line-height: 1;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+  .side-tab:hover .tab-label,
+  .side-tab.active .tab-label {
+    max-height: 120px;
+    opacity: 1;
+  }
+  #side-tabs:hover .side-tab.active:not(:hover) {
+    flex-grow: 1;
+    background: transparent;
+    color: #7f8794;
+  }
+  #side-tabs:hover .side-tab.active:not(:hover) .tab-label {
+    max-height: 0;
+    opacity: 0;
+  }
+  #side-panel {
+    position: absolute;
+    left: 64px;
+    top: 0;
+    bottom: 0;
+    width: 300px;
+    z-index: 2;
+    background: #ffffff;
+    box-shadow: 8px 0 28px rgba(0, 0, 0, 0.16);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: 56px;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+    pointer-events: auto;
+  }
+  #side-dock.open #side-panel {
+    transform: translateX(0);
+  }
+  #side-dock:not(.open) #side-panel {
+    box-shadow: none;
+  }
+  #side-collapse {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border: 1px solid #e4e7eb;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #14161b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+  }
+  #side-collapse:hover {
+    background: #f0f2f5;
+  }
+  .side-view {
+    width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .side-view[hidden] {
+    display: none;
+  }
+  .side-view-head {
+    height: 52px;
+    line-height: 52px;
+    padding: 0 18px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1c1f26;
+    border-bottom: 1px solid #eef0f3;
+    flex: 0 0 auto;
+  }
+  .side-search-box {
+    padding: 14px 16px 8px;
+  }
+  #side-search-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid #e4e7eb;
+    border-radius: 10px;
+    background: #f6f7f9;
+    color: #1c1f26;
+    font-size: 14px;
+    outline: none;
+  }
+  #side-search-input:focus {
+    border-color: #a9b0bb;
+    background: #ffffff;
+  }
+  .side-search-result {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 4px 12px 16px;
+  }
+  .search-result {
+    display: block;
+    padding: 11px 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #1c1f26;
+    transition: background 0.15s ease;
+  }
+  .search-result:hover {
+    background: #f3f5f8;
+  }
+  .search-result-title {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .search-result-excerpt {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    color: #7a828e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .search-empty {
+    padding: 22px 12px;
+    color: #9aa1ab;
+    font-size: 13px;
+    text-align: center;
+  }
+  .song-list {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 8px 10px;
+  }
+  .song-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 9px 12px;
+    margin: 0 0 6px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: #1c1f26;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .song-item:hover {
+    background: #f3f5f8;
+  }
+  .song-item.playing {
+    background: #eef3ff;
+  }
+  .song-title {
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .song-artist {
+    font-size: 11px;
+    color: #7a828e;
+  }
+  .player-dock {
+    flex: 0 0 auto;
+    padding: 12px 16px 16px;
+    border-top: 1px solid #eef0f3;
+    background: #ffffff;
+  }
+  .player-now {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+  }
+  #player-title {
+    font-size: 14px;
+    color: #1c1f26;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #player-artist {
+    font-size: 12px;
+    color: #8b93a0;
+    white-space: nowrap;
+  }
+  .player-progress-track {
+    height: 5px;
+    margin: 10px 0 4px;
+    background: #eef0f3;
+    border-radius: 999px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  #player-progress-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: #14161b;
+    border-radius: 999px;
+  }
+  .player-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9aa1ab;
+  }
+  .player-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .player-btn {
+    flex: 1;
+    height: 34px;
+    border: 1px solid #e4e7eb;
+    border-radius: 10px;
+    background: #f6f7f9;
+    color: #1c1f26;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .player-btn.primary {
+    background: #14161b;
+    border-color: #14161b;
+    color: #ffffff;
+  }
+  .player-modes {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .mode-btn {
+    flex: 1;
+    height: 30px;
+    border: 1px solid #e4e7eb;
+    border-radius: 999px;
+    background: transparent;
+    color: #7a828e;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mode-btn.active {
+    border-color: #14161b;
+    background: #14161b;
+    color: #ffffff;
+  }
+  .side-links-empty {
+    padding: 24px 18px;
+    color: #8b93a0;
+    font-size: 13px;
+  }
+  .muted {
+    color: #b0b6bf;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      margin-left: 48px;
+    }
+    body.side-open main {
+      margin-left: 48px;
+    }
+    #side-tabs {
       width: 48px;
-      height: 150px;
-      margin: 0;
-      border-radius: 0 24px 24px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
-      z-index: 1000;
-      color: #000000;
-      background: linear-gradient(90deg, #ffffff 0%, #ffd24d 100%);
-      transition: left 0.3s ease, opacity 0.25s ease;
     }
-    #player-toggle:hover,
-    #player-toggle.open {
-      left: 0;
+    .side-tab {
+      min-height: 48px;
     }
-    #player-toggle span {
-      font-size: 12px;
-      line-height: 1;
-      letter-spacing: 2px;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
+    #side-panel {
+      width: min(300px, 86vw);
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var tracks = [
+      { title: "A Lie", artist: "EGO-WRAPPIN'", url: "/music/A Lie-EGO-WRAPPIN'.mp3" },
+      { title: "distance", artist: "宇多田光", url: "/music/distance-宇多田光.mp3" },
+      { title: "Just the Two of Us", artist: "Bill Withers", url: "/music/Just the Two of Us-Bill Withers.mp3" },
+      { title: "One more time, One more chance", artist: "山崎将义", url: "/music/One more time, One more chance.mp3" },
+      { title: "plastic love", artist: "竹内玛莉亚", url: "/music/plastic love-竹内玛莉亚.mp3" },
+      { title: "speed of liget", artist: "arknight", url: "/music/speed of liget-arknight.mp3" },
+      { title: "春风吹", artist: "方大同", url: "/music/春风吹-方大同.mp3" },
+      { title: "过程", artist: "蛋堡", url: "/music/过程-蛋堡.mp3" },
+      { title: "花田错", artist: "王力宏", url: "/music/花田错-王力宏.mp3" },
+      { title: "漫步人生路", artist: "邓丽君", url: "/music/漫步人生路-邓丽君.mp3" },
+      { title: "如果当时", artist: "许嵩", url: "/music/如果当时-许嵩.mp3" },
+      { title: "瘦子", artist: "丁世光", url: "/music/瘦子-丁世光.mp3" },
+      { title: "台風の夜", artist: "具島直子", url: "/music/台風の夜-具島直子.mp3" },
+      { title: "天天", artist: "陶喆", url: "/music/天天-陶喆.mp3" },
+      { title: "夜的第七章", artist: "周杰伦", url: "/music/夜的第七章-周杰伦.mp3" },
+      { title: "about time", artist: "Sarah Kang", url: "/music/about time-Sarah Kang.mp3" },
+      { title: "Goodbye to Your Love", artist: "二宫爱", url: "/music/Goodbye to Your Love-二宫爱.mp3" },
+      { title: "money", artist: "Pink Floyd", url: "/music/money-Pink Floyd.mp3" },
+      { title: "Paris Blues", artist: "Terry Callier", url: "/music/Paris Blues-Terry Callier-.mp3" },
+      { title: "Serendipity", artist: "西原健一郎", url: "/music/Serendipity-西原健一郎.mp3" },
+      { title: "爱的初体验", artist: "张震岳", url: "/music/爱的初体验-张震岳.mp3" },
+      { title: "春天花会开", artist: "任贤齐", url: "/music/春天花会开-任贤齐.mp3" },
+      { title: "红豆", artist: "王菲", url: "/music/红豆-王菲.mp3" },
+      { title: "君は天然色", artist: "大滝詠一", url: "/music/君は天然色-大滝詠一.mp3" },
+      { title: "平安夜", artist: "山下达郎", url: "/music/平安夜-山下达郎.mp3" },
+      { title: "沙滩", artist: "陶喆", url: "/music/沙滩-陶喆.mp3" },
+      { title: "四季ノ唄", artist: "unknown", url: "/music/四季ノ唄-unknow.mp3" },
+      { title: "太聪明", artist: "陈绮贞", url: "/music/太聪明-陈绮贞.mp3" },
+      { title: "突然的自我", artist: "伍佰", url: "/music/突然的自我-伍佰.mp3" }
+    ];
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
-    /* ===== 播放器面板：纯白侧边栏 ===== */
-    #player-panel {
-      position: fixed;
-      left: 0;
-      top: calc(32% + 150px);
-      width: 210px;
-      height: 320px;
-      z-index: 999;
-      display: none;
-      border-radius: 0 28px 28px 0;
-      padding: 16px 12px;
-      box-sizing: border-box;
-      background: #ffffff;
-      overflow: visible;
-    }
-    #global-aplayer {
-      width: 100%;
-      height: 100%;
+    function formatTime(seconds) {
+      if (!isFinite(seconds)) { return '0:00'; }
+      var m = Math.floor(seconds / 60);
+      var s = Math.floor(seconds % 60);
+      return m + ':' + (s < 10 ? '0' + s : s);
     }
 
-    /* ===== 隐藏封面图 ===== */
-    #global-aplayer .aplayer-pic {
-      display: none !important;
-    }
-    #global-aplayer .aplayer-info {
-      margin-left: 0 !important;
+    /* ===== 侧栏切换 ===== */
+    var dock = document.getElementById('side-dock');
+    var tabs = document.querySelectorAll('.side-tab');
+    var views = {
+      search: document.getElementById('view-search'),
+      player: document.getElementById('view-player'),
+      links: document.getElementById('view-links')
+    };
+
+    function setActivePanel(name) {
+      Object.keys(views).forEach(function (key) {
+        views[key].hidden = key !== name;
+      });
+      tabs.forEach(function (tab) {
+        tab.classList.toggle('active', tab.getAttribute('data-panel') === name);
+      });
+      if (name === 'search') {
+        loadSearchData();
+      }
     }
 
-    #global-aplayer .aplayer {
-      height: 100% !important;
-      width: 100% !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      overflow: visible !important;
-      border-radius: 0 !important;
-      position: relative !important;
-    }
-    #global-aplayer .aplayer .aplayer-info {
-      height: 100% !important;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 16px 12px;
-      background: transparent !important;
-      margin-left: 0 !important;
-    }
-    /* 歌曲信息 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-music {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      width: 100%;
-      margin-bottom: 8px;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1a1a2e;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-author {
-      font-size: 11px;
-      color: #555;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-    }
-    /* 控制器 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      gap: 4px;
-    }
-    /* 进度条 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap {
-      display: flex !important;
-      width: 100%;
-      padding: 0 2px;
-      margin-bottom: 4px;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
-      background: rgba(26, 26, 46, 0.15) !important;
-      height: 3px !important;
-      border-radius: 4px !important;
-      width: 100%;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
-      background: #1a1a2e !important;
-      height: 3px !important;
-      border-radius: 4px !important;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
-      width: 10px !important;
-      height: 10px !important;
-      background: #1a1a2e !important;
-      top: -3.5px !important;
-    }
-    /* 按钮行 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-controls {
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-    }
-    /* 隐藏不需要的按钮 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-back,
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-forward,
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-volume,
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-lrc {
-      display: none !important;
-    }
-    /* 歌单菜单按钮 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu {
-      display: flex !important;
-      font-size: 16px !important;
-      width: 28px !important;
-      height: 28px !important;
-      align-items: center;
-      justify-content: center;
-      color: #1a1a2e !important;
-      cursor: pointer;
-      opacity: 0.7;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu:hover {
-      opacity: 1;
-    }
-    /* 循环模式按钮 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order,
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop {
-      display: flex !important;
-      font-size: 16px !important;
-      width: 28px !important;
-      height: 28px !important;
-      align-items: center;
-      justify-content: center;
-      color: #1a1a2e !important;
-      cursor: pointer;
-      opacity: 0.7;
-    }
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order.active,
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop.active {
-      opacity: 1 !important;
-    }
-    /* 播放/暂停 */
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-play,
-    #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-pause {
-      font-size: 24px !important;
-      width: 38px !important;
-      height: 38px !important;
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      color: #1a1a2e !important;
-      cursor: pointer;
-    }
-    /* 歌单列表：从底部往上弹出 */
-    #global-aplayer .aplayer .aplayer-list {
-      display: none !important;
-      position: absolute !important;
-      bottom: 100% !important;
-      left: 0 !important;
-      width: 100% !important;
-      max-height: 140px !important;
-      overflow-y: auto !important;
-      background: rgba(255,255,255,0.95) !important;
-      border-radius: 12px 12px 0 0 !important;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.06) !important;
-      z-index: 1000 !important;
-    }
-    #global-aplayer .aplayer.aplayer-withlist .aplayer-list {
-      display: block !important;
+    function syncBodyShift() {
+      document.body.classList.toggle('side-open', dock.classList.contains('open'));
     }
 
-    /* ===== 按钮和面板的响应式调整 ===== */
-    @media (max-width: 768px) {
-      #player-toggle {
-        left: -12px !important;
-        top: 34% !important;
-        width: 40px !important;
-        height: 128px !important;
-        border-radius: 0 20px 20px 0 !important;
-      }
-      #player-toggle:hover,
-      #player-toggle.open {
-        left: 0 !important;
-      }
-      #player-toggle span {
-        font-size: 11px !important;
-      }
-      #player-panel {
-        left: 0 !important;
-        top: calc(34% + 128px) !important;
-        width: 180px !important;
-        height: 280px !important;
-        padding: 12px 8px !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-title {
-        font-size: 12px !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-music .aplayer-author {
-        font-size: 10px !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-play,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-pause {
-        font-size: 20px !important;
-        width: 32px !important;
-        height: 32px !important;
-      }
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-menu,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-order,
-      #global-aplayer .aplayer .aplayer-info .aplayer-controller .aplayer-icon-loop {
-        font-size: 14px !important;
-        width: 24px !important;
-        height: 24px !important;
-      }
+    function openPanel(name) {
+      setActivePanel(name);
+      dock.classList.add('open');
+      syncBodyShift();
     }
-  </style>
 
-  <script>
-    var ap = new APlayer({
-      container: document.getElementById('global-aplayer'),
-      fixed: false,
-      autoplay: false,
-      loop: 'all',
-      order: 'random',
-      mutex: true,
-      audio: [
-        {
-          title: "A Lie",
-          artist: "EGO-WRAPPIN'",
-          url: "/music/A Lie-EGO-WRAPPIN'.mp3",
-        },
-        {
-          title: "distance",
-          artist: "宇多田光",
-          url: "/music/distance-宇多田光.mp3",
-        },
-        {
-          title: "Just the Two of Us",
-          artist: "Bill Withers",
-          url: "/music/Just the Two of Us-Bill Withers.mp3",
-        },
-        {
-          title: "One more time, One more chance",
-          artist: "山崎将义",
-          url: "/music/One more time, One more chance.mp3",
-        },
-        {
-          title: "plastic love",
-          artist: "竹内玛莉亚",
-          url: "/music/plastic love-竹内玛莉亚.mp3",
-        },
-        {
-          title: "speed of liget",
-          artist: "arknight",
-          url: "/music/speed of liget-arknight.mp3",
-        },
-        {
-          title: "春风吹",
-          artist: "方大同",
-          url: "/music/春风吹-方大同.mp3",
-        },
-        {
-          title: "过程",
-          artist: "蛋堡",
-          url: "/music/过程-蛋堡.mp3",
-        },
-        {
-          title: "花田错",
-          artist: "王力宏",
-          url: "/music/花田错-王力宏.mp3",
-        },
-        {
-          title: "漫步人生路",
-          artist: "邓丽君",
-          url: "/music/漫步人生路-邓丽君.mp3",
-        },
-        {
-          title: "如果当时",
-          artist: "许嵩",
-          url: "/music/如果当时-许嵩.mp3",
-        },
-        {
-          title: "瘦子",
-          artist: "丁世光",
-          url: "/music/瘦子-丁世光.mp3",
-        },
-        {
-          title: "台風の夜",
-          artist: "具島直子",
-          url: "/music/台風の夜-具島直子.mp3",
-        },
-        {
-          title: "天天",
-          artist: "陶喆",
-          url: "/music/天天-陶喆.mp3",
-        },
-        {
-          title: "夜的第七章",
-          artist: "周杰伦",
-          url: "/music/夜的第七章-周杰伦.mp3",
-        },
-        {
-          title: "about time",
-          artist: "Sarah Kang",
-          url: "/music/about time-Sarah Kang.mp3",
-        },
-        {
-          title: "Goodbye to Your Love",
-          artist: "二宫爱",
-          url: "/music/Goodbye to Your Love-二宫爱.mp3",
-        },
-        {
-          title: "money",
-          artist: "Pink Floyd",
-          url: "/music/money-Pink Floyd.mp3",
-        },
-        {
-          title: "Paris Blues",
-          artist: "Terry Callier",
-          url: "/music/Paris Blues-Terry Callier-.mp3",
-        },
-        {
-          title: "Serendipity",
-          artist: "西原健一郎",
-          url: "/music/Serendipity-西原健一郎.mp3",
-        },
-        {
-          title: "爱的初体验",
-          artist: "张震岳",
-          url: "/music/爱的初体验-张震岳.mp3",
-        },
-        {
-          title: "春天花会开",
-          artist: "任贤齐",
-          url: "/music/春天花会开-任贤齐.mp3",
-        },
-        {
-          title: "红豆",
-          artist: "王菲",
-          url: "/music/红豆-王菲.mp3",
-        },
-        {
-          title: "君は天然色",
-          artist: "大滝詠一",
-          url: "/music/君は天然色-大滝詠一.mp3",
-        },
-        {
-          title: "平安夜",
-          artist: "山下达郎",
-          url: "/music/平安夜-山下达郎.mp3",
-        },
-        {
-          title: "沙滩",
-          artist: "陶喆",
-          url: "/music/沙滩-陶喆.mp3",
-        },
-        {
-          title: "四季ノ唄",
-          artist: "unknown",
-          url: "/music/四季ノ唄-unknow.mp3",
-        },
-        {
-          title: "太聪明",
-          artist: "陈绮贞",
-          url: "/music/太聪明-陈绮贞.mp3",
-        },
-        {
-          title: "突然的自我",
-          artist: "伍佰",
-          url: "/music/突然的自我-伍佰.mp3",
+    function closePanel() {
+      dock.classList.remove('open');
+      syncBodyShift();
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var name = tab.getAttribute('data-panel');
+        if (tab.classList.contains('active') && dock.classList.contains('open')) {
+          closePanel();
+          return;
         }
-      ]
+        openPanel(name);
+      });
     });
-    ap.init();
 
-    // ===== 歌单菜单按钮 =====
-    document.addEventListener('DOMContentLoaded', function() {
-      var menuBtn = document.querySelector('#global-aplayer .aplayer-icon-menu');
-      var player = document.querySelector('#global-aplayer .aplayer');
+    var collapseButton = document.getElementById('side-collapse');
+    if (collapseButton) {
+      collapseButton.addEventListener('click', closePanel);
+    }
 
-      if (menuBtn && player) {
-        menuBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          player.classList.toggle('aplayer-withlist');
+    /* ===== 搜索 ===== */
+    var searchData = null;
+    var searchLoaded = false;
+    var searchInput = document.getElementById('side-search-input');
+    var searchResult = document.getElementById('side-search-result');
+
+    function loadSearchData() {
+      if (searchLoaded) { return; }
+      fetch('/search.json', { credentials: 'same-origin' }).then(function (response) {
+        if (!response.ok) { throw new Error('search index failed'); }
+        return response.json();
+      }).then(function (data) {
+        searchData = data || [];
+        searchLoaded = true;
+      }).catch(function () {
+        searchLoaded = true;
+        searchData = [];
+      });
+    }
+
+    function makeExcerpt(content, query) {
+      var plain = String(content || '').replace(/\s+/g, ' ').trim();
+      var idx = plain.toLowerCase().indexOf(query.toLowerCase());
+      if (idx < 0) { return plain.slice(0, 60); }
+      var start = Math.max(0, idx - 16);
+      var end = Math.min(plain.length, idx + query.length + 48);
+      var prefix = start > 0 ? '…' : '';
+      return prefix + plain.slice(start, end);
+    }
+
+    function runSearch() {
+      var query = searchInput.value.trim();
+      if (!searchLoaded) { loadSearchData(); }
+      if (!query) {
+        searchResult.innerHTML = '<div class="search-empty">输入关键词开始搜索</div>';
+        return;
+      }
+      if (!searchData || searchData.length === 0) {
+        searchResult.innerHTML = '<div class="search-empty">正在准备搜索数据…</div>';
+        return;
+      }
+
+      var lower = query.toLowerCase();
+      var html = '';
+      searchData.forEach(function (item) {
+        var title = item.title || '';
+        var content = item.content || '';
+        if (title.toLowerCase().indexOf(lower) === -1 && content.toLowerCase().indexOf(lower) === -1) {
+          return;
+        }
+        html += '<a class="search-result" href="' + escapeHtml(item.url) + '">'
+          + '<span class="search-result-title">' + escapeHtml(title) + '</span>'
+          + '<span class="search-result-excerpt">' + escapeHtml(makeExcerpt(content, query)) + '</span>'
+          + '</a>';
+      });
+
+      searchResult.innerHTML = html || '<div class="search-empty">没有找到相关文章</div>';
+    }
+
+    searchInput.addEventListener('input', runSearch);
+
+    /* ===== 播放器 ===== */
+    var audio = new Audio();
+    var currentIndex = -1;
+    var mode = 'list';
+    var songList = document.getElementById('song-list');
+    var playerTitle = document.getElementById('player-title');
+    var playerArtist = document.getElementById('player-artist');
+    var btnPlay = document.getElementById('btn-play');
+    var btnPrev = document.getElementById('btn-prev');
+    var btnNext = document.getElementById('btn-next');
+    var progressFill = document.getElementById('player-progress-fill');
+    var progressTrack = document.querySelector('.player-progress-track');
+    var currentTimeEl = document.getElementById('player-current');
+    var durationEl = document.getElementById('player-duration');
+    var modeButtons = document.querySelectorAll('.mode-btn');
+
+    function renderSongs() {
+      songList.innerHTML = '';
+      tracks.forEach(function (track, index) {
+        var item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'song-item';
+        item.innerHTML = '<span class="song-title">' + escapeHtml(track.title) + '</span>'
+          + '<span class="song-artist">' + escapeHtml(track.artist) + '</span>';
+        item.addEventListener('click', function () {
+          play(index);
         });
+        songList.appendChild(item);
+      });
+    }
+
+    function updateSongHighlight() {
+      var items = songList.querySelectorAll('.song-item');
+      items.forEach(function (item, index) {
+        item.classList.toggle('playing', index === currentIndex);
+      });
+    }
+
+    function updateNowPlaying() {
+      if (currentIndex < 0) { return; }
+      playerTitle.textContent = tracks[currentIndex].title;
+      playerArtist.textContent = tracks[currentIndex].artist;
+    }
+
+    function updatePlayButton() {
+      var playIcon = btnPlay.querySelector('.icon-play');
+      var pauseIcon = btnPlay.querySelector('.icon-pause');
+      if (playIcon) { playIcon.hidden = !audio.paused; }
+      if (pauseIcon) { pauseIcon.hidden = audio.paused; }
+    }
+
+    function play(index) {
+      if (index < 0 || index >= tracks.length) { return; }
+      if (index === currentIndex) {
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+        updatePlayButton();
+        return;
+      }
+      currentIndex = index;
+      audio.src = tracks[index].url;
+      audio.play();
+      updateNowPlaying();
+      updatePlayButton();
+      updateSongHighlight();
+    }
+
+    function prev() {
+      if (tracks.length === 0) { return; }
+      play(currentIndex <= 0 ? tracks.length - 1 : currentIndex - 1);
+    }
+
+    function next() {
+      if (tracks.length === 0) { return; }
+      play(currentIndex < 0 ? 0 : (currentIndex + 1) % tracks.length);
+    }
+
+    function shuffleNext() {
+      if (tracks.length <= 1) { play(0); return; }
+      var randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * tracks.length);
+      } while (randomIndex === currentIndex);
+      play(randomIndex);
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      audio.loop = mode === 'single';
+      modeButtons.forEach(function (button) {
+        button.classList.toggle('active', button.getAttribute('data-mode') === mode);
+      });
+    }
+
+    btnPlay.addEventListener('click', function () {
+      if (currentIndex < 0) { play(0); return; }
+      if (audio.paused) { audio.play(); } else { audio.pause(); }
+      updatePlayButton();
+    });
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    modeButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        setMode(button.getAttribute('data-mode'));
+      });
+    });
+
+    audio.addEventListener('ended', function () {
+      if (mode === 'single') {
+        audio.currentTime = 0;
+        audio.play();
+      } else if (mode === 'shuffle') {
+        shuffleNext();
+      } else {
+        next();
       }
     });
-  </script>
+
+    audio.addEventListener('timeupdate', function () {
+      if (!isFinite(audio.duration)) { return; }
+      var percent = audio.duration > 0 ? (audio.currentTime / audio.duration) * 100 : 0;
+      progressFill.style.width = percent + '%';
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', function () {
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    progressTrack.addEventListener('click', function (event) {
+      if (!isFinite(audio.duration)) { return; }
+      var rect = progressTrack.getBoundingClientRect();
+      var ratio = (event.clientX - rect.left) / rect.width;
+      audio.currentTime = Math.max(0, Math.min(1, ratio)) * audio.duration;
+    });
+
+    renderSongs();
+    setMode('list');
+
+    /* ===== 初始化：桌面展开、移动端收起 ===== */
+    setActivePanel('search');
+    if (window.innerWidth <= 768) {
+      closePanel();
+    } else {
+      dock.classList.add('open');
+      syncBodyShift();
+    }
+  })();
+</script>
+
 
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
