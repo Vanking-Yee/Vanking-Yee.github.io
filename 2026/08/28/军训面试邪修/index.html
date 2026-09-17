@@ -1521,14 +1521,6 @@
       setActivePanel(name);
       dock.classList.add('open');
       syncBodyShift();
-      if (name === 'player') {
-        if (currentIndex < 0) {
-          play(0);
-        } else if (audio.paused) {
-          audio.play();
-          updatePlayButton();
-        }
-      }
     }
 
     function closePanel() {
