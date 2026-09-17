@@ -648,7 +648,7 @@
           </button>
           <button id="btn-play" class="player-btn primary" type="button" title="播放 / 暂停" aria-label="播放 / 暂停">
             <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
-            <svg class="icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" hidden><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
+            <svg class="icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" style="display:none;"><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
           </button>
           <button id="btn-next" class="player-btn" type="button" title="下一首" aria-label="下一首">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16 6h2v12h-2zM6 6l9 6-9 6z"></path></svg>
@@ -1273,8 +1273,8 @@
     function updatePlayButton() {
       var playIcon = btnPlay.querySelector('.icon-play');
       var pauseIcon = btnPlay.querySelector('.icon-pause');
-      if (playIcon) { playIcon.hidden = !audio.paused; }
-      if (pauseIcon) { pauseIcon.hidden = audio.paused; }
+      if (playIcon) { playIcon.style.display = audio.paused ? 'block' : 'none'; }
+      if (pauseIcon) { pauseIcon.style.display = audio.paused ? 'none' : 'block'; }
     }
 
     function play(index) {
@@ -1357,6 +1357,9 @@
     audio.addEventListener('loadedmetadata', function () {
       durationEl.textContent = formatTime(audio.duration);
     });
+
+    audio.addEventListener('play', updatePlayButton);
+    audio.addEventListener('pause', updatePlayButton);
 
     progressTrack.addEventListener('click', function (event) {
       if (!isFinite(audio.duration)) { return; }
